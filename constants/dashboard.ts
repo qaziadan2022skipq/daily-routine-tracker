@@ -1,7 +1,5 @@
 import {
   MessageCirclePlus,
-  Folder,
-  SendToBack,
   DollarSign,
   SmileIcon,
   Book,
@@ -13,8 +11,9 @@ import {
   Medal,
   MessageSquareHeart,
   Goal,
-  MessageSquareDiff,
-  Palette,
+  MedalIcon,
+  TrophyIcon,
+  Calendar,
 } from "lucide-react";
 
 export const sidebarRoutes = [
@@ -25,33 +24,39 @@ export const sidebarRoutes = [
     color: "text-sky-500",
   },
   {
-    label: "zen Zone Meditation Log",
+    label: "Achievements",
+    icon: TrophyIcon,
+    href: "/achievements",
+    color: "text-sky-500",
+  },
+  {
+    label: "Bio Hacking",
     icon: SmileIcon,
-    href: "/zen-zone",
+    href: "/bio-hacking",
     color: "text-orange-500",
   },
   {
-    label: "Book Tracker",
+    label: "AI Trends Analysis",
     icon: Book,
-    href: "/book-tracker",
+    href: "/ai-trends-analysis",
     color: "text-orange-500",
   },
   {
-    label: "Water Intake Tracker",
+    label: "Daily Goals",
     icon: GlassWater,
-    href: "/water-intake-tracker",
+    href: "/daily-goals",
     color: "text-orange-500",
   },
   {
-    label: "Sleep Tracker",
+    label: "Journals",
     icon: Bed,
-    href: "/sleep-tracker",
+    href: "/journals",
     color: "text-orange-500",
   },
   {
-    label: "Mood Tracker",
+    label: "Personal Growth Dashboard",
     icon: SmilePlus,
-    href: "/mood-tracker",
+    href: "/perosnal-growth-dashboard",
     color: "text-orange-500",
   },
   {
@@ -63,13 +68,25 @@ export const sidebarRoutes = [
   {
     label: "Progress Achievements",
     icon: Medal,
-    href: "progress-achievements",
+    href: "/progress-achievements",
+    color: "text-orange-500",
+  },
+  {
+    label: "Calander",
+    icon: Calendar,
+    href: "/calander",
+    color: "text-orange-500",
+  },
+  {
+    label: "Zen Zone Meditation Log",
+    icon: Calendar,
+    href: "/zen-zone",
     color: "text-orange-500",
   },
   {
     label: "Inspiration Feeds",
     icon: MessageSquareHeart,
-    href: "inspiration-feeds",
+    href: "/inspiration-feeds",
     color: "text-orange-500",
   },
   {
@@ -79,9 +96,9 @@ export const sidebarRoutes = [
     color: "text-orange-500",
   },
   {
-    label: "Review Prompts",
-    icon: MessageSquareDiff,
-    href: "improved-review-prompts",
+    label: "Exercise Tracker",
+    icon: Goal,
+    href: "/exercise-tracker",
     color: "text-orange-500",
   },
   {

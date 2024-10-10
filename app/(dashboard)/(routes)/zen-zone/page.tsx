@@ -5,18 +5,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Frown, Meh, MessageCirclePlus, Smile, SmileIcon } from 'lucide-react';
-import Heading from '@/components/heading';
+import { Frown, Meh, Smile } from 'lucide-react';
 
 const ZenZoneMeditationLog = () => {
   const [meditationLogs, setMeditationLogs] = useState<any>([]);
-  const [duration, setDuration] = useState('');
-  const [reflection, setReflection] = useState('');
-  const [mood, setMood] = useState('neutral');
+  const [duration, setDuration] = useState<any>('');
+  const [reflection, setReflection] = useState<any>('');
+  const [mood, setMood] = useState<any>('neutral');
 
   useEffect(() => {
     // Load meditation logs from localStorage
-    const savedLogs = localStorage.getItem('meditationLogs') || "" || [];
+    const savedLogs = localStorage.getItem('meditationLogs') || [];
     setMeditationLogs(savedLogs);
   }, []);
 
@@ -39,16 +38,7 @@ const ZenZoneMeditationLog = () => {
   };
 
   return (
-    <div className="min-h-screen dark:bg-black p-8">
-      <Heading
-        title="Zen Zone Meditation Log"
-        description="Tracker your Meditation here."
-        icon={SmileIcon}
-        iconColor="text-sky-500"
-        bgColor="bg-sky-500/10"
-      />
-    <div className="grid col-span-1 md:col-span-2 lg:col-span-3">
-    <Card>
+    <Card className="col-span-1 md:col-span-2 lg:col-span-3">
       <CardHeader>
         <CardTitle>Zen Zone Meditation Log</CardTitle>
       </CardHeader>
@@ -112,9 +102,6 @@ const ZenZoneMeditationLog = () => {
         </div>
       </CardContent>
     </Card>
-    </div>
-
-    </div>
   );
 };
 
