@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+model Book {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   
+  title     String
+  author    String
+  startDate String
+  endDate   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WaterIntake {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  date      String
+  amount    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SleepLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  date      String
+  hours     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MoodLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  date      String
+  mood      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Inspiration {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  author    String?
+  category  String
+  type      String   // 'quote' or 'tip'
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   
+  text      String
+  completed Boolean  @default(false)
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MeditationSession {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  date      String
+  duration  Int      // duration in seconds
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GrowthData {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  date      String
+  progress  Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Supplement {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  dosage    String
+  time      String
+  userId    String
+}
+
+model DailyLog {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  date        String
+  cognitive   Int
+  energy      Int
+  hydration   Int
+  supplements Json      // Store supplements as a JSON object
+  userId      String
+}
+
+model Exercise {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String
+  name           String
+  type           ExerciseType
+  duration       Int
+  intensity      ExerciseIntensity
+  weight Int
+  caloriesBurned Int
+  date           DateTime @default(now())
+}
+
+enum ExerciseType {
+  running
+  weightlifting
+  cycling
+  yoga
+  intense_workout
+}
+
+enum ExerciseIntensity {
+  easy
+  medium
+  hard
+}
+
+model JournalEntry {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  date      String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Event {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  title     String
+  type      String
+  date      String
+  time      String
+  duration  String?
+  completed Boolean  @default(false)
+}
