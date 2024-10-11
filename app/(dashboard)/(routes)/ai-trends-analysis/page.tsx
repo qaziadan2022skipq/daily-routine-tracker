@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   LineChart,
@@ -14,21 +14,19 @@ import {
 import { Brain } from "lucide-react";
 
 const AIPoweredTrendAnalysis = () => {
-  const trendData = [
-    { name: "Week 1", productivity: 65, mood: 70, sleep: 75 },
-    { name: "Week 2", productivity: 68, mood: 72, sleep: 73 },
-    { name: "Week 3", productivity: 75, mood: 68, sleep: 80 },
-    { name: "Week 4", productivity: 80, mood: 75, sleep: 82 },
-    { name: "Week 5", productivity: 82, mood: 80, sleep: 85 },
-    { name: "Week 6", productivity: 87, mood: 83, sleep: 87 },
-  ];
+  const [trendData, setTrendData] = useState([]);
+  const [insights, setInsights] = useState([]);
 
-  const insights = [
-    "Your productivity has shown a consistent upward trend over the past 6 weeks.",
-    "There's a strong correlation between your sleep quality and productivity levels.",
-    "Your mood tends to improve following weeks of higher productivity.",
-    "Consider focusing on sleep hygiene to potentially boost your overall well-being.",
-  ];
+  useEffect(() => {
+    const fetchTrendData = async () => {
+      const response = await fetch("/api/trends");
+      const data = await response.json();
+      setTrendData(data.trendData);
+      setInsights(data.insights);
+    };
+
+    fetchTrendData();
+  }, []);
 
   return (
     <Card className="col-span-1 md:col-span-2 lg:col-span-3">

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const userId = "1234"
+const userId = "1234";
 export async function GET() {
   try {
     // const { userId } = auth();
@@ -31,13 +31,33 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { duration, date } = body;
 
-    const session = await prisma.meditationSession.create({
-      data: {
+    let session: any;
+    const oldSession = await prisma.meditationSession.findFirst({
+      where: {
         userId,
-        duration: duration,
-        date: date
+        date,
       },
     });
+
+    if (oldSession) {
+      session = await prisma.meditationSession.update({
+        where: {
+          id: oldSession.id,
+        },
+        data: {
+          duration: duration + oldSession.duration,
+        },
+      });
+    } else {
+      session = await prisma.meditationSession.create({
+        data: {
+          userId,
+          duration: duration,
+          date: date,
+        },
+      });
+    }
+
     return NextResponse.json({ session }, { status: 201 });
   } catch (error) {
     console.error("[MEDITATION_POST_ERROR]", error);

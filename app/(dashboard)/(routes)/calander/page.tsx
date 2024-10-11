@@ -117,15 +117,15 @@ const CustomizableCalendar: React.FC = () => {
 
     try {
       const { id } = updatedEvents[index];
-      await axios.put(`/api/events/${id}`, { ...updatedEvents[index] });
+      await axios.put(`/api/events`, { ...updatedEvents[index] });
     } catch (error) {
       console.error("Error updating event completion", error);
     }
   };
 
   const deleteEvent = async (index: number) => {
-    const { id } = events[index];
-
+    const {id} = events[index];
+    console.log(id)
     try {
       await axios.delete(`/api/events`, { params: { id: id } });
       setEvents((prev) => prev.filter((_, i) => i !== index));

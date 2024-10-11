@@ -54,18 +54,6 @@ export const sidebarRoutes = [
     color: "text-orange-500",
   },
   {
-    label: "Personal Growth Dashboard",
-    icon: SmilePlus,
-    href: "/perosnal-growth-dashboard",
-    color: "text-orange-500",
-  },
-  {
-    label: "Task Manager",
-    icon: File,
-    href: "/task-manager",
-    color: "text-orange-500",
-  },
-  {
     label: "Progress Achievements",
     icon: Medal,
     href: "/progress-achievements",
@@ -107,10 +95,10 @@ export const sidebarRoutes = [
     href: "/manage_subscriptions",
     color: "text-pink-400",
   },
-  {
-    label: "Personal Ai",
-    icon: Bot,
-    href: "/conversation",
-    color: "text-pink-400",
-  },
+  // {
+  //   label: "Personal Ai",
+  //   icon: Bot,
+  //   href: "/conversation",
+  //   color: "text-pink-400",
+  // },
 ];

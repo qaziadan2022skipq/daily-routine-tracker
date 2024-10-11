@@ -109,7 +109,7 @@ export async function DELETE(request: NextRequest) {
       where: { id: id },
     });
 
-    return new NextResponse("Event deleted successfully", { status: 204 });
+    return new NextResponse("Event deleted successfully", { status: 201 });
   } catch (error) {
     console.log("[EVENTS_DELETE_ERROR]", error);
     return new NextResponse("Internal Error", { status: 500 });
