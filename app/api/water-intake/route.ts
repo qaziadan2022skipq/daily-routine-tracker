@@ -4,18 +4,17 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const userId = "1234"
 export async function GET() {
   try {
-    // const { userId } = auth();
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const waterIntake = await prisma.waterIntake.findMany({
       where: {
-        userId: userId
-      }
+        userId: userId,
+      },
     });
     return NextResponse.json({ waterIntake }, { status: 200 });
   } catch (error) {
@@ -26,10 +25,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    // const { userId } = auth();
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const { date, amount } = await request.json();
     const intake = await prisma.waterIntake.create({

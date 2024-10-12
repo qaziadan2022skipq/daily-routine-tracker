@@ -3,13 +3,13 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const userId = "1234"
+
 export async function GET(request: Request) {
   try {
-    // const { userId } = auth(); // Get userId from authentication
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth(); // Get userId from authentication
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const exercises = await prisma.exercise.findMany({
       where: { userId },
@@ -23,10 +23,10 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    // const { userId } = auth(); // Get userId from authentication
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth(); // Get userId from authentication
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const body = await request.json();
     const { name, type, duration, intensity, weight } = body;
@@ -58,10 +58,10 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    // const { userId } = auth(); // Get userId from authentication
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth(); // Get userId from authentication
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const body = await request.json();
     const { exerciseId, updates } = body; // updates should include fields to be updated
@@ -79,28 +79,38 @@ export async function PUT(request: Request) {
 }
 
 // Helper function to calculate calories burned
-const calculateCalories = (duration: number, intensity: string, type: string, weight: number): number => {
-  const intensityFactor:any = { easy: 0.8, medium: 1, hard: 1.2 };
+const calculateCalories = (
+  duration: number,
+  intensity: string,
+  type: string,
+  weight: number
+): number => {
+  const intensityFactor: any = { easy: 0.8, medium: 1, hard: 1.2 };
   const weightInKg = parseFloat(weight.toString());
 
   let caloriesPerMinute: number;
 
   switch (type) {
-    case 'running':
+    case "running":
       const baseCaloriesPerMinute = 124.7 / 10;
-      caloriesPerMinute = (baseCaloriesPerMinute * (weightInKg / 60)) * (intensity === 'hard' ? 1 : intensityFactor[intensity] / intensityFactor.hard);
+      caloriesPerMinute =
+        baseCaloriesPerMinute *
+        (weightInKg / 60) *
+        (intensity === "hard"
+          ? 1
+          : intensityFactor[intensity] / intensityFactor.hard);
       break;
-    case 'weightlifting':
-      caloriesPerMinute = 3 + (intensityFactor[intensity] * 3);
+    case "weightlifting":
+      caloriesPerMinute = 3 + intensityFactor[intensity] * 3;
       break;
-    case 'cycling':
-      caloriesPerMinute = 7 + (intensityFactor[intensity] * 8);
+    case "cycling":
+      caloriesPerMinute = 7 + intensityFactor[intensity] * 8;
       break;
-    case 'yoga':
-      caloriesPerMinute = 3 + (intensityFactor[intensity] * 4);
+    case "yoga":
+      caloriesPerMinute = 3 + intensityFactor[intensity] * 4;
       break;
-    case 'intense workout':
-      caloriesPerMinute = 10 + (intensityFactor[intensity] * 5);
+    case "intense workout":
+      caloriesPerMinute = 10 + intensityFactor[intensity] * 5;
       break;
     default:
       caloriesPerMinute = 5;

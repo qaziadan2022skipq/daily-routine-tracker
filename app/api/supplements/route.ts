@@ -3,13 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const userId = "1234"
+
 export async function GET() {
   try {
-    // const { userId } = auth();
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const supplements = await prisma.supplement.findMany({
       where: {
@@ -25,10 +25,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    // const { userId } = auth();
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const body = await request.json();
     const { name, dosage, time } = body;
@@ -51,10 +51,10 @@ export async function POST(request: Request) {
 // Optional: DELETE for removing a supplement
 export async function DELETE(request: NextRequest) {
   try {
-    // const { userId } = auth();
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
     const supplementId = request.nextUrl.searchParams.get("id")
     if (!supplementId){
         return NextResponse.json({ message: "Supplement Id not found" }, { status: 404 });

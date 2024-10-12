@@ -4,14 +4,12 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const userId = "1234";
-
 export async function GET() {
   try {
-    // const { userId } = auth();
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const sleepLog = await prisma.sleepLog.findMany({
       where: {
@@ -27,10 +25,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    // const { userId } = auth();
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const body = await request.json();
     const { date, hours } = body;

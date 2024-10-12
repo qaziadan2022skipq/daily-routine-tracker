@@ -4,16 +4,16 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const userId = "1234"
+
 export async function GET() {
     try {
-    //   const { userId } = auth();
-    //   if (!userId) {
-    //     return new NextResponse("Unauthorized User", { status: 401 });
-    //   }
+      const { userId } = auth();
+      if (!userId) {
+        return new NextResponse("Unauthorized User", { status: 401 });
+      }
   
       // Fetch growth data for the user (this assumes you have a GrowthData model)
-      const growthData = await prisma.growthData.findMany({
+      const tasks = await prisma.task.findMany({
         where: { userId },
       });
   
@@ -36,9 +36,9 @@ export async function GET() {
       ];
   
       // Map the fetched data to the required format
-      const trendData = growthData.map((log, index) => ({
-        name: `Week ${index + 1}`,
-        productivity: log.progress, // Using the actual progress from GrowthData
+      const trendData = tasks.map((log, index) => ({
+        name: `Day ${index + 1}`,
+        productivity: log.completed, // Using the actual progress from GrowthData
         mood: moodLogs[index]?.mood || 0,
         sleep: sleepLogs[index]?.hours || 0,
       }));

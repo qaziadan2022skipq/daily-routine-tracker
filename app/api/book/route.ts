@@ -3,13 +3,13 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const userId = "1234"
+
 export async function GET() {
   try {
-    // const { userId } = auth();
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const books = await prisma.book.findMany({
         where: {
@@ -25,10 +25,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    // const { userId } = auth();
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const body = await request.json();
     const { title, author, startDate } = body;
@@ -51,10 +51,10 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    // const { userId } = auth();
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized User", { status: 401 });
-    // }
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
 
     const body = await request.json();
     const { bookId, endDate } = body
