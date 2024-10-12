@@ -92,13 +92,13 @@ const Dashboard = () => {
     };
 
     // Calculate today's completed tasks
-    let completedTasksToday = tasks.filter((task: any) => {
+    const completedTasksToday = tasks.filter((task: any) => {
       const taskDate = new Date(task.date).toISOString().split("T")[0]; // Ensure task.date is in the correct format
       return task.completed && taskDate === today;
     }).length;
 
     // Calculate today's meditation duration
-    let totalMeditationDurationToday = sessions.reduce(
+    const totalMeditationDurationToday = sessions.reduce(
       (acc: number, session: any) => {
         const sessionDate = new Date(session.date).toISOString().split("T")[0];
         return sessionDate === today ? acc + session.duration : acc;

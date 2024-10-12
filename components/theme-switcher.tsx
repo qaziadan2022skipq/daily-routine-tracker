@@ -26,8 +26,8 @@ const ModeToggle = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {themes.map((theme) => (
-            <DropdownMenuItem onClick={() => setTheme(theme)}>
+          {themes.map((theme, index) => (
+            <DropdownMenuItem key={index} onClick={() => setTheme(theme)}>
               {theme}
             </DropdownMenuItem>
           ))}
