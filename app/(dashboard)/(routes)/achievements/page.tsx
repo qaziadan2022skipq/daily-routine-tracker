@@ -1,5 +1,7 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -17,8 +19,36 @@ import {
   Unlock,
 } from "lucide-react";
 
+interface Achievement {
+  icon: JSX.Element; // React element for the icon
+  title: string; // Title of the achievement
+  description: string; // Description of the achievement
+}
+
+interface Medal {
+  title: string; // Title of the medal
+  unlocked: boolean; // Whether the medal is unlocked
+}
+
 const EnhancedProgressAchievements = () => {
-  const achievements = [
+  const [achievements, setAchievements] = useState<Medal[]>([]); // Specify type for achievements
+
+  useEffect(() => {
+    const fetchAchievementsStatus = async () => {
+      try {
+        const response = await axios.get(`/api/check-achievements`, {
+          params: { id: localStorage.getItem("userId") },
+        });
+        setAchievements(response.data);
+      } catch (error) {
+        console.error("Failed to fetch achievements status", error);
+      }
+    };
+
+    fetchAchievementsStatus();
+  }, []);
+
+  const achievementList: Achievement[] = [
     {
       icon: <Trophy className="w-6 h-6 text-yellow-500" />,
       title: "30-Day Streak",
@@ -71,86 +101,8 @@ const EnhancedProgressAchievements = () => {
     },
   ];
 
-  const medals = [
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "7-Day Meditation Streak",
-      unlocked: true,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "30-Day Mood Logging Streak",
-      unlocked: true,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "Completed 5 Monthly Reviews",
-      unlocked: true,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "Read 5 Self-Improvement Books",
-      unlocked: true,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "Achieved 10 Personal Goals",
-      unlocked: true,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "30-Day Meditation Streak",
-      unlocked: false,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "100-Day Habit Streak",
-      unlocked: false,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "Completed 20 Weekly Reviews",
-      unlocked: false,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "Read 20 Books in a Year",
-      unlocked: false,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "6 Months of Consistent Growth",
-      unlocked: false,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "Achieved 50 Personal Goals",
-      unlocked: false,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "365-Day App Usage Streak",
-      unlocked: false,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "Mindfulness Master (100 meditation sessions)",
-      unlocked: false,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "Sleep Schedule Perfectionist (30 days)",
-      unlocked: false,
-    },
-    {
-      icon: <Trophy className="w-4 h-4" />,
-      title: "Hydration Champion (60 days goal)",
-      unlocked: false,
-    },
-  ];
-
   return (
-    <Card className="col-span-1 md:col-span-2 lg:col-span-3">
+    <Card className="min-h-screen col-span-1 md:col-span-2 lg:col-span-3">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Trophy className="mr-2" />
@@ -159,20 +111,34 @@ const EnhancedProgressAchievements = () => {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {achievements.map((achievement, index) => (
-            <div
-              key={index}
-              className="bg-white p-4 rounded-lg shadow flex items-center space-x-4"
-            >
-              <div className="flex-shrink-0">{achievement.icon}</div>
-              <div>
-                <h3 className="font-semibold">{achievement.title}</h3>
-                <p className="text-sm text-gray-600">
-                  {achievement.description}
-                </p>
+          {achievementList.map((achievement, index) => {
+            const completedAchievement = achievements.find(
+              (a: Medal) => a.title === achievement.title
+            );
+            return (
+              <div
+                key={index}
+                className={`bg-white p-4 rounded-lg shadow flex items-center space-x-4 ${
+                  completedAchievement?.unlocked
+                    ? "border border-green-500"
+                    : "border border-gray-300"
+                }`}
+              >
+                <div className="flex-shrink-0">{achievement.icon}</div>
+                <div>
+                  <h3 className="font-semibold">{achievement.title}</h3>
+                  <p className="text-sm text-gray-600">
+                    {achievement.description}
+                  </p>
+                  {completedAchievement?.unlocked ? (
+                    <Unlock className="w-4 h-4 text-green-500" />
+                  ) : (
+                    <Lock className="w-4 h-4 text-gray-500" />
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <div className="mt-6">
           <h3 className="font-semibold mb-2">Recent Milestones</h3>
@@ -188,7 +154,7 @@ const EnhancedProgressAchievements = () => {
         <div className="mt-6">
           <h3 className="font-semibold mb-2">Medals Gallery</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {medals.map((medal, index) => (
+            {achievements.map((medal: Medal, index) => (
               <div
                 key={index}
                 className={`flex items-center p-2 rounded-full ${
@@ -196,7 +162,7 @@ const EnhancedProgressAchievements = () => {
                 }`}
               >
                 <div className="relative">
-                  {medal.icon}
+                  <Trophy className="w-4 h-4" />
                   {medal.unlocked ? (
                     <Unlock className="w-3 h-3 text-green-500 absolute -top-1 -right-1" />
                   ) : (

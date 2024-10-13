@@ -76,3 +76,24 @@ export async function PUT(request: Request) {
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized User", { status: 401 });
+    }
+
+    const body = await request.json();
+    const { logId } = body;
+
+    await prisma.zenZone.delete({
+      where: { id: logId },
+    });
+
+    return NextResponse.json({ message: "Meditation log deleted" }, { status: 200 });
+  } catch (error) {
+    console.log("[MEDITATION_LOGS_DELETE_ERROR]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}
