@@ -8,7 +8,7 @@ const openai = new OpenAI({
 
 const prisma = new PrismaClient();
 
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
