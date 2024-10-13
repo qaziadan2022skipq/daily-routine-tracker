@@ -55,20 +55,21 @@ export async function POST(request: Request) {
     const tip = tips.choices[0].message.content || "";
     const quote = response.choices[0].message.content || "";
 
-    const newQuote = await prisma.inspiration.create({
-      data: {
-        content: quote,
-        author: "AI",
-        category: "motivation",
-        type: "quote",
-      },
-    });
     const newTip = await prisma.inspiration.create({
       data: {
         content: tip,
         author: "AI",
         category: "motivation",
-        type: "tip",
+        type: "Tip",
+      },
+    });
+
+    const newQuote = await prisma.inspiration.create({
+      data: {
+        content: quote,
+        author: "AI",
+        category: "motivation",
+        type: "Quote",
       },
     });
 

@@ -22,8 +22,8 @@ const InspirationFeed = () => {
   }, []);
 
   const fetchInspirations = async () => {
-    const response = await fetch("/api/inspiration");
-    const data = await response.json();
+    const response = await axios.get("/api/inspiration");
+    const data = response.data;
     setInspirations(data.inspirations);
   };
 
