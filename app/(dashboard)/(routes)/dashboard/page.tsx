@@ -15,8 +15,6 @@ import { Input } from "@/components/ui/input";
 import { Droplet, BookOpen, ZapIcon, Moon } from "lucide-react";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api"; // Change to your API URL
-
 const Dashboard: React.FC = () => {
   const [books, setBooks] = useState<any>([]);
   const [newBook, setNewBook] = useState<any>({
@@ -39,33 +37,33 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const fetchBooks = async () => {
-    const response = await fetch(`${API_URL}/book`);
+    const response = await fetch(`/api/book`);
     const data = await response.json();
     console.log(data);
     setBooks(data.books);
   };
 
   const fetchWaterIntake = async () => {
-    const response = await axios.get(`${API_URL}/water-intake`);
+    const response = await axios.get(`/api/water-intake`);
     const data = response.data.waterIntake;
     setWaterIntake(data);
   };
 
   const fetchSleepLog = async () => {
-    const response = await axios.get(`${API_URL}/sleep-log`);
+    const response = await axios.get(`/api/sleep-log`);
     const data = response.data.sleepLog;
     setSleepLog(data);
   };
 
   const fetchMoodLog = async () => {
-    const response = await axios.get(`${API_URL}/mood-log`);
+    const response = await axios.get(`/api/mood-log`);
     const data = response.data.moodLog;
     setMoodLog(data);
   };
 
   const handleAddBook = async () => {
     if (newBook.title && newBook.author && newBook.startDate) {
-      const response = await fetch(`${API_URL}/book`, {
+      const response = await fetch(`/api/book`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newBook),
@@ -78,7 +76,7 @@ const Dashboard: React.FC = () => {
 
   const handleFinishBook = async (id: string) => {
     const endDate = new Date().toISOString().split("T")[0];
-    const response = await axios.put(`${API_URL}/book`, {
+    const response = await axios.put(`/api/book`, {
       endDate: endDate,
       bookId: id,
     });
@@ -88,7 +86,7 @@ const Dashboard: React.FC = () => {
 
   const handleWaterIntake = async (amount: number) => {
     const today = new Date().toISOString().split("T")[0];
-    const response = await axios.post(`${API_URL}/water-intake`, {
+    const response = await axios.post(`/api/water-intake`, {
       date: today,
       amount,
     });
@@ -98,7 +96,7 @@ const Dashboard: React.FC = () => {
 
   const handleSleepLog = async () => {
     const today = new Date().toISOString().split("T")[0];
-    const response = await axios.post(`${API_URL}/sleep-log`, {
+    const response = await axios.post(`/api/sleep-log`, {
       date: today,
       hours: sleepHours,
     });
@@ -109,7 +107,7 @@ const Dashboard: React.FC = () => {
 
   const handleMoodLog = async () => {
     const today = new Date().toISOString().split("T")[0];
-    const response = await axios.post(`${API_URL}/mood-log`, {
+    const response = await axios.post(`/api/mood-log`, {
       date: today,
       mood: currentMood,
     });
