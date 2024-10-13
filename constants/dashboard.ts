@@ -11,6 +11,7 @@ import {
   TrophyIcon,
   Calendar,
   Dumbbell,
+  PenBoxIcon,
 } from "lucide-react";
 
 export const sidebarRoutes = [
@@ -62,10 +63,16 @@ export const sidebarRoutes = [
     href: "/calander",
     color: "text-orange-500",
   },
+  // {
+  //   label: "Zen Zone Meditation Log",
+  //   icon: Calendar,
+  //   href: "/zen-zone",
+  //   color: "text-orange-500",
+  // },
   {
-    label: "Zen Zone Meditation Log",
-    icon: Calendar,
-    href: "/zen-zone",
+    label: "Quiz",
+    icon: PenBoxIcon,
+    href: "/quiz",
     color: "text-orange-500",
   },
   {
