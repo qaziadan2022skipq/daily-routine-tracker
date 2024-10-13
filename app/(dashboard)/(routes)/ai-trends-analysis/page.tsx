@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Brain } from "lucide-react";
+import axios from "axios";
 
 const AIPoweredTrendAnalysis = () => {
   const [trendData, setTrendData] = useState([]);
@@ -19,8 +20,8 @@ const AIPoweredTrendAnalysis = () => {
 
   useEffect(() => {
     const fetchTrendData = async () => {
-      const response = await fetch("/api/trends");
-      const data = await response.json();
+      const response = await axios.get("/api/trends");
+      const data = response.data;
       setTrendData(data.trendData);
       setInsights(data.insights);
     };
