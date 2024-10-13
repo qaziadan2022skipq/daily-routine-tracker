@@ -28,7 +28,7 @@ const InspirationFeed = () => {
   };
 
   return (
-    <Card className="col-span-1 md:col-span-2 lg:col-span-3">
+    <Card className="min-h-screen col-span-1 md:col-span-2 lg:col-span-3">
       <CardHeader>
         <CardTitle className="flex items-center">
           <MessageCircle className="mr-2" />
