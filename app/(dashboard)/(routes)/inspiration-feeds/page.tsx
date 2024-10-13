@@ -19,18 +19,12 @@ const InspirationFeed = () => {
 
   useEffect(() => {
     fetchInspirations();
-    addInspiration();
   }, []);
 
   const fetchInspirations = async () => {
     const response = await fetch("/api/inspiration");
     const data = await response.json();
     setInspirations(data.inspirations);
-  };
-
-  const addInspiration = async () => {
-    const response = await axios.post("/api/inspiration");
-    console.log(response.data.inspiration);
   };
 
   return (
