@@ -23,7 +23,7 @@ const Sidebar = (
   const pathname = usePathname();
   return (
     <div className="space-y-4 py-3 flex flex-col h-full bg-[#161717] text-white drop-shadow-xl">
-      <div className="px-2 py-2 overflow-scroll">
+      <div className="px-2 py-2 ">
         <Link
           href="/chat"
           className="flex justify-center mb-2 text-xl font-bold"

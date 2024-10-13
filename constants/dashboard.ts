@@ -43,8 +43,8 @@ export const sidebarRoutes = [
   },
   {
     label: "Daily Goals",
-    icon: GlassWater,
-    href: "/daily-goals",
+    icon: Goal,
+    href: "daily-goals",
     color: "text-orange-500",
   },
   {
@@ -78,16 +78,16 @@ export const sidebarRoutes = [
     color: "text-orange-500",
   },
   {
-    label: "Daily Goals",
-    icon: Goal,
-    href: "daily-goals",
-    color: "text-orange-500",
-  },
-  {
     label: "Exercise Tracker",
     icon: Goal,
     href: "/exercise-tracker",
     color: "text-orange-500",
+  },
+  {
+    label: "Improvement Advisor",
+    icon: Bot,
+    href: "/improvement-advisor",
+    color: "text-pink-400",
   },
   {
     label: "Manage Subscriptions",
@@ -95,10 +95,4 @@ export const sidebarRoutes = [
     href: "/manage_subscriptions",
     color: "text-pink-400",
   },
-  // {
-  //   label: "Personal Ai",
-  //   icon: Bot,
-  //   href: "/conversation",
-  //   color: "text-pink-400",
-  // },
 ];
