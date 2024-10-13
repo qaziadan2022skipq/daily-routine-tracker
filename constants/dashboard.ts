@@ -3,17 +3,14 @@ import {
   DollarSign,
   SmileIcon,
   Book,
-  GlassWater,
   Bed,
-  SmilePlus,
-  File,
   Bot,
   Medal,
   MessageSquareHeart,
   Goal,
-  MedalIcon,
   TrophyIcon,
   Calendar,
+  Dumbbell,
 } from "lucide-react";
 
 export const sidebarRoutes = [
@@ -79,7 +76,7 @@ export const sidebarRoutes = [
   },
   {
     label: "Exercise Tracker",
-    icon: Goal,
+    icon: Dumbbell,
     href: "/exercise-tracker",
     color: "text-orange-500",
   },

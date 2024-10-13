@@ -6,7 +6,7 @@ import { Target, Moon, Droplet, Book, CheckSquare, Clock } from 'lucide-react';
 
 const DailyGoals = () => {
   return (
-    <Card className="col-span-1 md:col-span-2 lg:col-span-3">
+    <Card className="min-h-screen col-span-1 md:col-span-1 lg:col-span-1">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Target className="mr-2" />
@@ -14,7 +14,7 @@ const DailyGoals = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-y-8">
           <div className="flex items-start">
             <Moon className="mr-2 mt-1 text-blue-500" />
             <div>
@@ -51,7 +51,7 @@ const DailyGoals = () => {
             </div>
           </div>
         </div>
-        <p className="mt-4 text-sm text-gray-600">Remember, these are general guidelines. Adjust goals based on your personal needs, lifestyle, and any medical conditions. Consistency is key in forming habits.</p>
+        <p className="mt-12 text-sm text-gray-600">Remember, these are general guidelines. Adjust goals based on your personal needs, lifestyle, and any medical conditions. Consistency is key in forming habits.</p>
       </CardContent>
     </Card>
   );

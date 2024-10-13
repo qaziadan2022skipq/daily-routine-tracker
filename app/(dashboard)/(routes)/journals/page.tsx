@@ -121,7 +121,7 @@ const PrivateJournal: React.FC = () => {
   const entriesForSelectedDate = journalEntries[formatDate(selectedDate)] || [];
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="min-h-screen">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Calendar className="mr-2" />
@@ -170,7 +170,7 @@ const PrivateJournal: React.FC = () => {
                   >
                     <span className="flex items-center">
                       <Clock className="mr-2" size={16} />
-                      Entry: {formatTime(entry.timestamp)}
+                      Jornal written at {formatTime(entry.date)}
                     </span>
                   </Button>
                   <Button

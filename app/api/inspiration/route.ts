@@ -25,7 +25,6 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
@@ -41,26 +40,57 @@ export async function POST(request: Request) {
         },
       ],
     });
-
     // Ensure response from OpenAI is valid
     if (!response || !response.choices || response.choices.length === 0) {
       return new NextResponse("No response from OpenAI", { status: 500 });
     }
 
+    const tips = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `
+                  Your are a professional daily rotine  improvement advisor
+                  Task: Share some tips in paragraph with user so that they can imporve daily routine.
+                  Topic: Daily Life and improvement
+                  Audience: any
+                  Format: Text
+                  `,
+        },
+      ],
+    });
+    // Ensure response from OpenAI is valid
+    if (!tips || !tips.choices || tips.choices.length === 0) {
+      return new NextResponse("No response from OpenAI", { status: 500 });
+    }
+
     console.log(response.choices[0].message.content);
 
+    const tip = tips.choices[0].message.content || "";
     const quote = response.choices[0].message.content || "";
 
-    const inspiration = await prisma.inspiration.create({
+    const newQuote = await prisma.inspiration.create({
       data: {
         content: quote,
-        author: "any",
+        author: "AI",
         category: "motivation",
         type: "quote",
       },
     });
+    const newTip = await prisma.inspiration.create({
+      data: {
+        content: tip,
+        author: "AI",
+        category: "motivation",
+        type: "tips",
+      },
+    });
 
-    return NextResponse.json({ inspiration }, { status: 201 });
+    return NextResponse.json(
+      { inspiration: { newQuote, newTip } },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("[INSPIRATIONS_POST_ERROR]", error);
     return new NextResponse("Internal Error", { status: 500 });
