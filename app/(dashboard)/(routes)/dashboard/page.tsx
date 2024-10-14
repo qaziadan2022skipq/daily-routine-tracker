@@ -19,7 +19,7 @@ const Dashboard = () => {
     }
   });
   return (
-    <div className="min-h-screen bg-primary">
+    <div className="min-h-screen bg-muted-foreground">
       <div className="mb-8 flex flex-col items-center space-y-2">
         <h2 className="text-2xl mt-6 md:text-4xl font-bold text-muted text-center">
           Welcome 👋
