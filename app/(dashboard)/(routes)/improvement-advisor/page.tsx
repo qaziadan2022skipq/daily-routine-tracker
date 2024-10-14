@@ -1,113 +1,139 @@
 "use client";
 
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import * as z from "zod";
+import Heading from "@/components/heading";
+import { BotMessageSquareIcon, MessageSquare } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { formSchema } from "./constants";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { MessageSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import axios from "axios";
+import { Empty } from "@/components/empty";
+import { Loader } from "@/components/loader";
+import { cn } from "@/lib/utils";
+import { UserAvatar } from "@/components/user-avatar";
+import { BotAvatar } from "@/components/bot-avatar";
 
-const ImprovementAdvisor = () => {
-  const [chatMessages, setChatMessages] = useState<any>([]);
-  const [inputMessage, setInputMessage] = useState<any>("");
-  const [improvementGoal, setImprovementGoal] = useState<any>("");
-  const [chatState, setChatState] = useState<any>("initial");
+const Conversation = () => {
+  const router = useRouter();
+  const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
 
-  const handleSendMessage = () => {
-    if (inputMessage.trim() !== "") {
-      setChatMessages([
-        ...chatMessages,
-        { text: inputMessage, sender: "user" },
-      ]);
-      setInputMessage("");
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      prompt: "",
+    },
+  });
 
-      setTimeout(() => {
-        let botResponse;
-        if (chatState === "initial" || chatState === "asking") {
-          setImprovementGoal(inputMessage);
-          botResponse = getImprovementAdvice(inputMessage);
-          setChatState("advising");
-        } else {
-          botResponse =
-            "Is there anything else you'd like to improve? If so, please let me know, and I'll provide advice on that topic.";
-          setChatState("asking");
-        }
-        setChatMessages((prev: any) => [
-          ...prev,
-          { text: botResponse, sender: "bot" },
-        ]);
-      }, 1000);
+  const isLoading = form.formState.isSubmitting;
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const userMessage: ChatCompletionMessageParam = {
+        role: "user",
+        content: values.prompt,
+      };
+      console.log(userMessage);
+      const newMessages = [userMessage, ...messages];
+      const response = await axios.post("/api/ai-advisor", {
+        messages: newMessages,
+      });
+      setMessages((current) => [...current, userMessage, response.data]);
+      form.reset();
+    } catch (error: any) {
+      // todo: Open Pro Modal
+      // if (error.response.status === 403) proModal.open();
+      console.log(error);
+    } finally {
+      router.refresh();
     }
   };
-
-  const getImprovementAdvice = (goal: any) => {
-    switch (goal.toLowerCase()) {
-      case "productivity":
-        return "To improve productivity, try: 1) Use the Pomodoro Technique, 2) Prioritize tasks, 3) Minimize distractions, 4) Take regular breaks.";
-      case "fitness":
-        return "To improve fitness: 1) Set specific goals, 2) Create a balanced workout routine, 3) Stay consistent, 4) Pay attention to nutrition, 5) Get enough sleep.";
-      case "learning":
-        return "To enhance learning: 1) Use active recall, 2) Practice spaced repetition, 3) Teach others, 4) Apply knowledge practically, 5) Maintain a growth mindset.";
-      default:
-        return `To improve ${goal}, set specific goals, break them into smaller steps, work consistently, and seek feedback. Adjust your approach as needed.`;
-    }
-  };
-
   return (
-    <div className="h-full bg-gray-100 p-4">
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-8 h-full">
-        {/* Improvement Advisor */}
-        <Card className="col-span-1 md:col-span-2 lg:col-span-1 min-h-screen">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <MessageSquare className="mr-2" />
-              Improvement Advisor
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="">
-            <div className="min-h-screen overflow-y-auto mb-4 p-4 bg-gray-50 rounded">
-              {chatMessages.length === 0 && (
-                <p className="text-gray-500 italic">
-                  Welcome! What would you like to improve today?
-                </p>
-              )}
-              {chatMessages.map((msg: any, index: any) => (
-                <div
-                  key={index}
-                  className={`mb-2 ${
-                    msg.sender === "user" ? "text-right" : "text-left"
-                  }`}
-                >
-                  <span
-                    className={`inline-block p-2 rounded ${
-                      msg.sender === "user"
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200"
-                    }`}
-                  >
-                    {msg.text}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <div className="flex">
-              <Input
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Type your message..."
-                className="mr-2"
+    <div className="min-h-screen mt-4">
+      <Heading
+        title="Improvement Advisor"
+        description="Get advices about you daily life routine"
+        icon={BotMessageSquareIcon}
+        iconColor="text-primary"
+        bgColor="bg-blue-600/20"
+      />
+      <div className="px-4 lg:px-8">
+        <div>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="
+                rounded-lg 
+                border 
+                w-full 
+                p-4 
+                px-3 
+                md:px-6 
+                focus-within:shadow-sm
+                grid
+                grid-cols-12
+                gap-2
+              "
+            >
+              <FormField
+                name="prompt"
+                render={({ field }) => (
+                  <FormItem className="col-span-12 lg:col-span-10">
+                    <FormControl className="m-0 p-0">
+                      <Input
+                        className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent text-primary"
+                        disabled={isLoading}
+                        placeholder="Ask questions about daily routine?"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
               />
-              <Button onClick={handleSendMessage}>Send</Button>
+              <Button
+                className="col-span-12 lg:col-span-2 w-full"
+                type="submit"
+                disabled={isLoading}
+                size="icon"
+              >
+                Send
+              </Button>
+            </form>
+          </Form>
+        </div>
+        <div className="space-y-4 mt-4">
+          {isLoading && (
+            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+              <Loader />
             </div>
-            {improvementGoal && (
-              <p className="text-sm text-gray-500 mt-2">
-                Current focus: Improving {improvementGoal}
-              </p>
-            )}
-          </CardContent>
-        </Card>
+          )}
+          {messages.length === 0 && !isLoading && (
+            <Empty label="No conversation started." />
+          )}
+          <div className="flex flex-col-reverse gap-y-4 h-[46rem] overflow-y-scroll">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={cn(
+                  "p-6 w-full flex items-start gap-x-8 rounded-lg ",
+                  message.role === "user"
+                    ? "bg-white border border-black/10 text-primary"
+                    : "bg-muted text-primary-foreground"
+                )}
+              >
+                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+                <p className="text-sm">{String(message.content)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default ImprovementAdvisor;
+export default Conversation;

@@ -25,7 +25,7 @@ const Sidebar = (
     <div className="space-y-4 py-3 flex flex-col h-full bg-[#161717] text-white drop-shadow-xl">
       <div className="px-2 py-2 ">
         <Link
-          href="/chat"
+          href="/dashboard"
           className="flex justify-center mb-2 text-xl font-bold"
         >
         <Image src={'/main-logo.png'} width={120} height={90} alt="mainlogo" />
