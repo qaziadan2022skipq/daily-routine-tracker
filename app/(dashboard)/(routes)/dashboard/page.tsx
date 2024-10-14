@@ -19,20 +19,20 @@ const Dashboard = () => {
     }
   });
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-primary">
       <div className="mb-8 flex flex-col items-center space-y-2">
-        <h2 className="text-2xl mt-6 md:text-4xl font-bold text-primary text-center">
+        <h2 className="text-2xl mt-6 md:text-4xl font-bold text-muted text-center">
           Welcome 👋
         </h2>
         <Image
-          className="mt-6"
+          className="mt-2 lg:mt-6 px-4"
           src="/nudge-logo.png"
           width={400}
           height={400}
           alt="main"
         />
 
-        <p className="text-muted-foreground font-light text-small md:text-lg text-center">
+        <p className="text-primary-foreground font-light text-small md:text-lg text-center">
           Your Daily Routine Tracker
         </p>
       </div>
