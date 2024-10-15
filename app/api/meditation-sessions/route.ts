@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { duration, date } = body;
+    const { duration, date, reflection, mood } = body;
 
     let session: any;
     const oldSession = await prisma.meditationSession.findFirst({
@@ -46,6 +46,8 @@ export async function POST(request: Request) {
         },
         data: {
           duration: duration + oldSession.duration,
+          reflection: reflection,
+          mood: mood,
         },
       });
     } else {
@@ -53,6 +55,8 @@ export async function POST(request: Request) {
         data: {
           userId,
           duration: duration,
+          reflection: reflection,
+          mood: mood,
           date: date,
         },
       });

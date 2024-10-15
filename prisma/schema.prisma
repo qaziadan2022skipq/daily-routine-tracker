@@ -71,6 +71,8 @@ model MeditationSession {
   userId    String
   date      String
   duration  Int      // duration in seconds
+  reflection String
+  mood String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

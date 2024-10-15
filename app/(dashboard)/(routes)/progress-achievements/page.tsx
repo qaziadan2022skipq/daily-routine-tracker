@@ -12,19 +12,30 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
-import { MessageSquare, ZapIcon, BarChart2, CheckCircle } from "lucide-react";
+// import { Progress } from "@/components/ui/progress";
+import {
+  ZapIcon,
+  BarChart2,
+  CheckCircle,
+  Frown,
+  Meh,
+  Smile,
+} from "lucide-react";
 import axios from "axios";
+import { Textarea } from "@/components/ui/textarea";
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState<any>([]);
   const [newTask, setNewTask] = useState<any>("");
   const [meditationTime, setMeditationTime] = useState<any>(0);
+  const [recordedTime, setRecordedTime] = useState<any>(0);
   const [isMeditating, setIsMeditating] = useState<any>(false);
   const [meditationSessions, setMeditationSessions] = useState<any>([]);
   const [growthData, setGrowthData] = useState<any>([]);
   const [selectedDay, setSelectedDay] = useState<any | null>(null);
   const [daySessions, setDaySessions] = useState<any[]>([]);
+  const [reflection, setReflection] = useState("");
+  const [mood, setMood] = useState("neutral");
 
   useEffect(() => {
     fetchTasks();
@@ -166,17 +177,30 @@ const Dashboard = () => {
 
   const stopMeditation = async () => {
     setIsMeditating(false);
-    const newSession = { date: new Date(), duration: meditationTime };
+    setRecordedTime(meditationTime);
+  };
+
+  const saveMeditationLog = async () => {
+    setIsMeditating(false);
+    const newSession = { date: new Date(), duration: recordedTime };
     const endDate = new Date().toISOString().split("T")[0];
     const response = await fetch("/api/meditation-sessions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ duration: meditationTime, date: endDate }),
+      body: JSON.stringify({
+        duration: recordedTime,
+        date: endDate,
+        reflection: reflection,
+        mood: mood,
+      }),
     });
 
     const data = await response.json();
+    setMeditationTime(0);
+    setMood("")
+    setReflection("")
     setMeditationSessions([...meditationSessions, data.session]);
     updateGrowthData(tasks, [...meditationSessions, data.session]);
   };
@@ -189,10 +213,6 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      {/* <h1 className="text-3xl text-primary font-bold mb-8 text-center">
-        Progress Achievements Dashboard
-      </h1> */}
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {/* Zen Zone */}
         <Card>
@@ -202,7 +222,7 @@ const Dashboard = () => {
               Zen Zone
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col gap-y-2">
             <p className="mb-4">
               Meditation Time: {formatTime(meditationTime)}
             </p>
@@ -219,6 +239,51 @@ const Dashboard = () => {
                 Start Meditation
               </Button>
             )}
+            <div>
+              <label
+                htmlFor="reflection"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Reflection
+              </label>
+              <Textarea
+                id="reflection"
+                value={reflection}
+                onChange={(e) => setReflection(e.target.value)}
+                placeholder="What did you meditate about? How do you feel?"
+                rows={4}
+              />
+            </div>
+
+            {isMeditating === false && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Mood after meditation
+                </label>
+                <div className="flex space-x-4 mt-2">
+                  <Button
+                    variant={mood === "bad" ? "default" : "outline"}
+                    onClick={() => setMood("bad")}
+                  >
+                    <Frown className="mr-2" /> Bad
+                  </Button>
+                  <Button
+                    variant={mood === "neutral" ? "default" : "outline"}
+                    onClick={() => setMood("neutral")}
+                  >
+                    <Meh className="mr-2" /> Neutral
+                  </Button>
+                  <Button
+                    variant={mood === "good" ? "default" : "outline"}
+                    onClick={() => setMood("good")}
+                  >
+                    <Smile className="mr-2" /> Good
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            <Button onClick={saveMeditationLog}>Save Meditation Log</Button>
 
             <div id="work" className="mt-4">
               <h3 className="text-lg font-semibold mb-2">
