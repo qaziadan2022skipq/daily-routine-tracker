@@ -135,6 +135,7 @@ enum ExerciseIntensity {
 model JournalEntry {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String
+  name      String
   date      String
   content   String
   createdAt DateTime @default(now())

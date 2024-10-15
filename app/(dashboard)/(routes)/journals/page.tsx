@@ -1,32 +1,38 @@
-'use client'
-import React, { useState, useEffect } from 'react';
+"use client";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar, Plus, Clock, Trash } from "lucide-react";
-import axios from 'axios';
+import axios from "axios";
 
 interface JournalEntry {
-    id: number;
-    date: string; // ISO string format 'YYYY-MM-DD'
-    content: string;
-    timestamp: string; // ISO timestamp
+  id: number;
+  name: string;
+  date: string; // ISO string format 'YYYY-MM-DD'
+  content: string;
+  timestamp: string; // ISO timestamp
 }
 
 const PrivateJournal: React.FC = () => {
-  const [journalEntries, setJournalEntries] = useState<Record<string, JournalEntry[]>>({});
+  const [journalEntries, setJournalEntries] = useState<
+    Record<string, JournalEntry[]>
+  >({});
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [entry, setEntry] = useState<string>('');
+  const [entry, setEntry] = useState<string>("");
   const [selectedEntryId, setSelectedEntryId] = useState<number | null>(null);
+  const [journalName, setJournalName] = useState<string>("");
 
   useEffect(() => {
     const fetchEntries = async () => {
-      const date = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+      const date = selectedDate.toISOString().split("T")[0]; // YYYY-MM-DD format
       try {
-        const response = await axios.get(`/api/journal`, { params: { date: date } });
+        const response = await axios.get(`/api/journal`, {
+          params: { date: date },
+        });
         const entries = response.data.entries;
-        setJournalEntries(prev => ({
+        setJournalEntries((prev) => ({
           ...prev,
           [date]: entries,
         }));
@@ -39,22 +45,28 @@ const PrivateJournal: React.FC = () => {
   }, [selectedDate]);
 
   useEffect(() => {
-    setEntry('');
+    setEntry("");
     setSelectedEntryId(null);
   }, [selectedDate]);
 
   const formatDate = (date: Date) => {
-    return date.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
+    return date.toISOString().split("T")[0]; // Returns 'YYYY-MM-DD'
   };
 
   const formatDisplayDate = (date: Date) => {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
     return date.toLocaleDateString(undefined, options);
   };
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
-    return isNaN(date.getTime()) ? '' : date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return isNaN(date.getTime())
+      ? ""
+      : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   const saveJournalEntry = async () => {
@@ -62,18 +74,19 @@ const PrivateJournal: React.FC = () => {
       const date = formatDate(selectedDate);
       const newEntry = {
         date: date,
+        name: journalName,
         content: entry.trim(),
       };
 
       try {
-        const response = await axios.post('/api/journal', newEntry);
+        const response = await axios.post("/api/journal", newEntry);
         const savedEntry = response.data.entry;
 
-        setJournalEntries(prev => ({
+        setJournalEntries((prev) => ({
           ...prev,
           [date]: [...(prev[date] || []), savedEntry],
         }));
-        setEntry('');
+        setEntry("");
         setSelectedEntryId(savedEntry.id);
       } catch (error) {
         console.error("Error saving journal entry", error);
@@ -87,30 +100,34 @@ const PrivateJournal: React.FC = () => {
 
   const handleEntrySelect = (entryId: number) => {
     const formattedDate = formatDate(selectedDate);
-    const selectedEntry = journalEntries[formattedDate]?.find(e => e.id === entryId);
+    const selectedEntry = journalEntries[formattedDate]?.find(
+      (e) => e.id === entryId
+    );
     if (selectedEntry) {
       setEntry(selectedEntry.content);
+      setJournalName(selectedEntry.name)
       setSelectedEntryId(entryId);
     }
   };
 
   const handleNewEntry = () => {
-    setEntry('');
+    setEntry("");
+    setJournalName("")
     setSelectedEntryId(null);
   };
 
   const deleteJournalEntry = async (entryId: number) => {
     try {
-      await axios.delete(`/api/journal`, {params: {id: entryId}});
-      setJournalEntries(prev => {
+      await axios.delete(`/api/journal`, { params: { id: entryId } });
+      setJournalEntries((prev) => {
         const date = formatDate(selectedDate);
         return {
           ...prev,
-          [date]: prev[date].filter(entry => entry.id !== entryId),
+          [date]: prev[date].filter((entry) => entry.id !== entryId),
         };
       });
       if (selectedEntryId === entryId) {
-        setEntry('');
+        setEntry("");
         setSelectedEntryId(null);
       }
     } catch (error) {
@@ -130,7 +147,27 @@ const PrivateJournal: React.FC = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <label htmlFor="journalDate" className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+          <label
+            htmlFor="journalDate"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Journal Name
+          </label>
+          <Input
+            id="journalName"
+            type="text"
+            value={journalName}
+            onChange={(e) => setJournalName(e.target.value)}
+            className="w-full"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="journalDate"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Date
+          </label>
           <Input
             id="journalDate"
             type="date"
@@ -140,7 +177,12 @@ const PrivateJournal: React.FC = () => {
           />
         </div>
         <div>
-          <label htmlFor="journalEntry" className="block text-sm font-medium text-gray-700 mb-1">Your Private Thoughts</label>
+          <label
+            htmlFor="journalEntry"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Your Private Thoughts
+          </label>
           <Textarea
             id="journalEntry"
             value={entry}
@@ -159,18 +201,25 @@ const PrivateJournal: React.FC = () => {
         </div>
         {entriesForSelectedDate.length > 0 && (
           <div className="mt-4">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Entries for {formatDisplayDate(selectedDate)}:</h3>
+            <h3 className="text-sm font-medium text-gray-700 mb-2">
+              Entries for {formatDisplayDate(selectedDate)}:
+            </h3>
             <ul className="space-y-2">
               {entriesForSelectedDate.map((entry) => (
-                <li key={entry.id} className="flex justify-between items-center">
+                <li
+                  key={entry.id}
+                  className="flex justify-between items-center"
+                >
                   <Button
                     variant="ghost"
-                    className={`text-left flex items-center w-full justify-between p-2 rounded-md ${selectedEntryId === entry.id ? 'bg-gray-100' : ''}`}
+                    className={`text-left flex items-center w-full justify-between p-2 rounded-md ${
+                      selectedEntryId === entry.id ? "bg-gray-100" : ""
+                    }`}
                     onClick={() => handleEntrySelect(entry.id)}
                   >
                     <span className="flex items-center">
                       <Clock className="mr-2" size={16} />
-                      Jornal written at {formatTime(entry.date)}
+                      {entry.name} {formatTime(entry.date)}
                     </span>
                   </Button>
                   <Button

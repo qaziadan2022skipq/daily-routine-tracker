@@ -21,9 +21,9 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-muted-foreground">
       <div className="mb-8 flex flex-col items-center space-y-2">
-        <h2 className="text-2xl mt-6 md:text-4xl font-bold text-muted text-center">
+        {/* <h2 className="text-2xl mt-6 md:text-4xl font-bold text-muted text-center">
           Welcome 👋
-        </h2>
+        </h2> */}
         <Image
           className="mt-2 lg:mt-6 px-4"
           src="/nudge-logo.png"

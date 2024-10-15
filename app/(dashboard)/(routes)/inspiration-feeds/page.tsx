@@ -45,6 +45,7 @@ const InspirationFeed = () => {
                 {item.author && (
                   <p className="text-sm text-gray-600">- {item.author}</p>
                 )}
+                
                 <div className="flex justify-between items-center mt-4">
                   <div className="flex space-x-2">
                     <Button variant="ghost" size="sm">

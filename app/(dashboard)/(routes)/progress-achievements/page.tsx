@@ -189,9 +189,9 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl text-primary font-bold mb-8 text-center">
+      {/* <h1 className="text-3xl text-primary font-bold mb-8 text-center">
         Progress Achievements Dashboard
-      </h1>
+      </h1> */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {/* Zen Zone */}

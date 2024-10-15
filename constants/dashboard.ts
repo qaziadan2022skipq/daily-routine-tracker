@@ -1,10 +1,6 @@
 import {
-  MessageCirclePlus,
   DollarSign,
   SmileIcon,
-  Book,
-  Bed,
-  Bot,
   Medal,
   MessageSquareHeart,
   Goal,
@@ -15,8 +11,8 @@ import {
   TrendingUp,
   MenuSquare,
   BotMessageSquareIcon,
-  BookCheckIcon,
   BookCopyIcon,
+  Brain,
 } from "lucide-react";
 
 export const sidebarRoutes = [
@@ -47,7 +43,7 @@ export const sidebarRoutes = [
   },
   {
     label: "AI Trends Analysis",
-    icon: Book,
+    icon: Brain,
     href: "/ai-trends-analysis",
     color: "text-orange-500",
   },
@@ -70,9 +66,9 @@ export const sidebarRoutes = [
     color: "text-orange-500",
   },
   {
-    label: "Calander",
+    label: "Calendar",
     icon: Calendar,
-    href: "/calander",
+    href: "/calendar",
     color: "text-orange-500",
   },
   // {

@@ -81,6 +81,7 @@ const CustomizableCalendar: React.FC = () => {
   ];
 
   const saveEvent = async () => {
+    console.log(newEvent.title, newEvent.type , newEvent.time)
     if (newEvent.title && newEvent.type && newEvent.time) {
       const eventToSave = {
         ...newEvent,

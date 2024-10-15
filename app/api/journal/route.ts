@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { date, content } = body;
+    const { date, content, name } = body;
 
     if (!date || !content) {
       return new NextResponse("Date and content are required", { status: 400 });
@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
 
     const entry = await prisma.journalEntry.create({
       data: {
+        name: name,
         date: date,
         content,
         userId: userId, // Store userId with the journal entry

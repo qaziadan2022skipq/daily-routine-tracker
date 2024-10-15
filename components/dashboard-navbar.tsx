@@ -7,6 +7,7 @@ import Image from "next/image";
 import MobileSidebar from "./mobile-sidebar";
 import ModeToggle from "./theme-switcher";
 import { UserButton } from "@clerk/nextjs";
+import Link from "next/link";
 
 const Navbar = async () => {
   //   const apiLimitCount = await getApiLimit() as number;
@@ -17,7 +18,12 @@ const Navbar = async () => {
         <MobileSidebar />
       </div>
       <div className="flex lg:hidden w-full items-center justify-center">
+      <Link
+          href="/dashboard"
+          className=""
+        >
         <Image src={"/main-logo.png"} width={120} height={90} alt="mainlogo" />
+        </Link>
       </div>
       <div className="flex justify-end">
         <div className="flex gap-x-2">
